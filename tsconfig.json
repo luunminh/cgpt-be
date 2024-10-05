@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "strictNullChecks": false,
+    "paths": {
+      "@adapter": ["src/adapter"],
+      "@adapter/*": ["src/adapter/*"],
+
+      "@use-cases": ["src/use-cases"],
+      "@use-cases/*": ["src/use-cases/*"],
+
+      "@entities": ["src/core/entities"],
+      "@entities/*": ["src/core/entities/*"],
+      "@repositories": ["src/core/repositories"],
+      "@repositories/*": ["src/core/repositories/*"],
+
+      "@config": ["src/infra/config"],
+      "@config/*": ["src/infra/config/*"],
+      "@modules": ["src/infra/modules"],
+      "@modules/*": ["src/infra/modules/*"],
+      "@infra": ["src/infra"],
+      "@infra/*": ["src/infra/*"],
+
+      "@shared": ["src/shared"],
+      "@shared/*": ["src/shared/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}

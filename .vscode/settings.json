@@ -1,0 +1,84 @@
+{
+  "files.exclude": {
+    ".coverage": true,
+    "dist": true,
+    "node_modules": true,
+    "buildspec-njsscan.yml": true,
+    "buildspec-owasp-depedency-check.yml": true,
+    "buildspec-owasp-zap.yml": true,
+    ".commitlintrc.json": true,
+    "reports": true
+  },
+  "tsco.useRegions": false,
+  "files.eol": "\n",
+  "editor.tabSize": 2,
+  "editor.renderWhitespace": "all",
+  "editor.formatOnSave": true,
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "typescript.preferences.importModuleSpecifierEnding": "minimal",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "jest.autoRun": "off",
+  "jest.enableSnapshotUpdateMessages": false,
+  "jest.enableSnapshotPreviews": false,
+  "jest.enableCodeLens": false,
+  "cSpell.words": [
+    "auths",
+    "checkin",
+    "CKAMT",
+    "cqrs",
+    "dbutilities",
+    "encumberance",
+    "ffata",
+    "FILNAM",
+    "IFNULL",
+    "ILIKE",
+    "jdbc",
+    "KFSICR",
+    "MICR",
+    "nestjs",
+    "numberernal",
+    "OPENSUM",
+    "plainto",
+    "POAMT",
+    "POIDC",
+    "POINTFP",
+    "presigner",
+    "PYTOTFP",
+    "rcuh",
+    "RMTDTLP",
+    "RMTHDRP",
+    "ruch",
+    "SBSR",
+    "Subaward",
+    "subawardee",
+    "Subbudget",
+    "subproject",
+    "superquote",
+    "TBDESC",
+    "TBMSTRP",
+    "Trvl",
+    "tsquery",
+    "Uncategorized",
+    "uuidv",
+    "YYMMDDH",
+    "YYMMDDSSS",
+    "zipcode",
+    "caigiaphaitra",
+    "dtos",
+    "pino"
+  ]
+}
