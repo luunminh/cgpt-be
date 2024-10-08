@@ -30,6 +30,10 @@
     "commit": "git-cz",
     "prepare": "husky"
   },
+  "prisma": {
+    "schema": "./src/infra/data/prisma/schema.prisma",
+    "seed": "ts-node ./src/infra/data/prisma/seeds/index.ts"
+  },
   "dependencies": {
     "@nestjs/axios": "3.0.2",
     "@nestjs/cache-manager": "2.2.2",
