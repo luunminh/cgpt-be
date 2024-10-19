@@ -2,7 +2,7 @@ import { SplitType } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class CreateExpenseTransactionDto {
+export class CreateExpenseTransactionModel {
   @ApiProperty({
     type: 'string',
     required: false,

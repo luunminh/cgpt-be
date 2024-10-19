@@ -1,7 +1,7 @@
 import { CategoryGroupType } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class LKExpenseCategoryDto {
+export class LKExpenseCategoryModel {
   @ApiProperty({
     type: 'string',
   })

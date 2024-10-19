@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class CreateIdentityDto {
+export class CreateIdentityModel {
   @ApiProperty({
     type: 'string',
     required: false,
@@ -10,6 +10,12 @@ export class CreateIdentityDto {
   @IsOptional()
   @IsString()
   updatedById?: string | null;
+  @ApiProperty({
+    type: 'string',
+  })
+  @IsNotEmpty()
+  @IsString()
+  username: string;
   @ApiProperty({
     type: 'string',
   })

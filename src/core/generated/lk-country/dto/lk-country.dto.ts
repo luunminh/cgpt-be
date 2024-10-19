@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class LkCountryDto {
+export class LkCountryModel {
   @ApiProperty({
     type: 'string',
   })

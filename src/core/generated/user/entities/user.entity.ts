@@ -1,7 +1,7 @@
 import { UserStatus, UserType } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 import { GroupEntity } from '../../group/entities/group.entity';
-import { IdentityEntity } from '../../identity/entities/identity.entity';
+import { VerificationTokenEntity } from '../../verification-token/entities/verification-token.entity';
 import { UserToRoleEntity } from '../../user-to-role/entities/user-to-role.entity';
 import { GroupMemberEntity } from '../../group-member/entities/group-member.entity';
 import { ProfileEntity } from '../../profile/entities/profile.entity';
@@ -46,12 +46,20 @@ export class UserEntity {
   @ApiProperty({
     type: 'string',
   })
+  username: string;
+  @ApiProperty({
+    type: 'string',
+  })
   email: string;
   @ApiProperty({
     type: 'string',
     nullable: true,
   })
   fullName: string | null;
+  @ApiProperty({
+    type: 'string',
+  })
+  hashedPassword: string;
   @ApiProperty({
     enum: UserStatus,
   })
@@ -67,11 +75,11 @@ export class UserEntity {
   })
   groupOwner?: GroupEntity[];
   @ApiProperty({
-    type: () => IdentityEntity,
+    type: () => VerificationTokenEntity,
     isArray: true,
     required: false,
   })
-  identities?: IdentityEntity[];
+  verificationTokens?: VerificationTokenEntity[];
   @ApiProperty({
     type: () => UserToRoleEntity,
     isArray: true,

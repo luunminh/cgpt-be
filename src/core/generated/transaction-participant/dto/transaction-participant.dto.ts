@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class TransactionParticipantDto {
+export class TransactionParticipantModel {
   @ApiProperty({
     type: 'string',
     format: 'date-time',

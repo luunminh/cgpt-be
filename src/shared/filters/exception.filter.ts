@@ -6,7 +6,7 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { getError, getStack } from '@shared/utils';
+import { getError, getStack } from 'src/core/utils';
 
 export interface GlobalExceptionFilterOptions {
   includeSensitive?: boolean;

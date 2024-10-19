@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class UserToRoleDto {
+export class UserToRoleModel {
   @ApiProperty({
     type: 'string',
     format: 'date-time',

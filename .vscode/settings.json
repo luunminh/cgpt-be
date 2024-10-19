@@ -81,6 +81,7 @@
     "dtos",
     "pino",
     "CGPT",
-    "lkexpense"
+    "lkexpense",
+    "Interactor"
   ]
 }

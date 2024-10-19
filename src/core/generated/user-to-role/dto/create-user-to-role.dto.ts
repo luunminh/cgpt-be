@@ -1,1 +1,1 @@
-export class CreateUserToRoleDto {}
+export class CreateUserToRoleModel {}

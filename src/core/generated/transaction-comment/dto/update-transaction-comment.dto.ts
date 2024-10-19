@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
-export class UpdateTransactionCommentDto {
+export class UpdateTransactionCommentModel {
   @ApiProperty({
     type: 'string',
     required: false,

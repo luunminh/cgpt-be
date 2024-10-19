@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
-export class UpdatePermissionDto {
+export class UpdatePermissionModel {
   @ApiProperty({
     type: 'string',
     required: false,

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class GroupMemberDto {
+export class GroupMemberModel {
   @ApiProperty({
     type: 'string',
     format: 'date-time',

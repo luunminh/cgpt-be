@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class IdentityDto {
+export class IdentityModel {
   @ApiProperty({
     type: 'string',
   })
@@ -20,6 +20,10 @@ export class IdentityDto {
     nullable: true,
   })
   updatedById: string | null;
+  @ApiProperty({
+    type: 'string',
+  })
+  username: string;
   @ApiProperty({
     type: 'string',
   })

@@ -1,7 +1,7 @@
 import { SplitType } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ExpenseTransactionDto {
+export class ExpenseTransactionModel {
   @ApiProperty({
     type: 'string',
   })

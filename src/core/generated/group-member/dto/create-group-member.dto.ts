@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
-export class CreateGroupMemberDto {
+export class CreateGroupMemberModel {
   @ApiProperty({
     type: 'string',
     required: false,

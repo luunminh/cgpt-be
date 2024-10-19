@@ -17,7 +17,7 @@ Clean Architecture is a software design pattern that separates the code into mul
 - Low level: More detail
 
 <hr/>
-- <a href="https://www.youtube.com/watch?v=QR2PScc_fMA&list=LL&index=2">Explaination video</a>
+- <a href="https://www.youtube.com/watch?v=p0bHhVSo_ME">Explaination video</a>
 
 # Folders Structure
 

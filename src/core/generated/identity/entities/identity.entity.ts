@@ -28,6 +28,10 @@ export class IdentityEntity {
   @ApiProperty({
     type: 'string',
   })
+  username: string;
+  @ApiProperty({
+    type: 'string',
+  })
   email: string;
   @ApiProperty({
     type: 'boolean',

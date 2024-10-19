@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ProfileDto {
+export class ProfileModel {
   @ApiProperty({
     type: 'string',
     format: 'date-time',

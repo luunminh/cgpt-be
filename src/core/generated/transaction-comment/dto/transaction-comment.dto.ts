@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class TransactionCommentDto {
+export class TransactionCommentModel {
   @ApiProperty({
     type: 'string',
   })

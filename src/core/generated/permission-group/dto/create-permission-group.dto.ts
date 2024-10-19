@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class CreatePermissionGroupDto {
+export class CreatePermissionGroupModel {
   @ApiProperty({
     type: 'string',
     required: false,

@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDecimal, IsOptional, IsString } from 'class-validator';
 
-export class UpdateLedgerDto {
+export class UpdateLedgerModel {
   @ApiProperty({
     type: 'string',
     required: false,

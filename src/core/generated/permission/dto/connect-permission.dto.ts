@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsNotEmpty } from 'class-validator';
 
-export class ConnectPermissionDto {
+export class ConnectPermissionModel {
   @ApiProperty({
     type: 'integer',
     format: 'int32',

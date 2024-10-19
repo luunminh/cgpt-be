@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class LedgerDto {
+export class LedgerModel {
   @ApiProperty({
     type: 'string',
   })

@@ -1,5 +1,3 @@
-import { OrderDirection } from './order-query-params';
-
 /**
  * Interface intended for requesting results paginated
  */
@@ -17,7 +15,8 @@ export interface PaginationRequest {
   /**
    * Sort orders
    */
-  order?: { [field: string]: OrderDirection };
+  order?: string;
+  // order?: { [field: string]: OrderDirection };
 
   /**
    * Other params of type T

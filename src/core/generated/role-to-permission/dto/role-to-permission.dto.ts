@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class RoleToPermissionDto {
+export class RoleToPermissionModel {
   @ApiProperty({
     type: 'string',
     format: 'date-time',

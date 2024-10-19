@@ -1,7 +1,7 @@
 import { GroupType } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class GroupDto {
+export class GroupModel {
   @ApiProperty({
     type: 'string',
   })

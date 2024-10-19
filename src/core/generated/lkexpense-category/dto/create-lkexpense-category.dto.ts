@@ -2,7 +2,7 @@ import { CategoryGroupType } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class CreateLKExpenseCategoryDto {
+export class CreateLKExpenseCategoryModel {
   @ApiProperty({
     type: 'string',
     required: false,

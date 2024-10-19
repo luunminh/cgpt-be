@@ -2,7 +2,7 @@ import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class UserToRoleUserIdRoleIdUniqueInputDto {
+export class UserToRoleUserIdRoleIdUniqueInputModel {
   @ApiProperty({
     type: 'string',
   })
@@ -17,13 +17,13 @@ export class UserToRoleUserIdRoleIdUniqueInputDto {
   roleId: string;
 }
 
-@ApiExtraModels(UserToRoleUserIdRoleIdUniqueInputDto)
-export class ConnectUserToRoleDto {
+@ApiExtraModels(UserToRoleUserIdRoleIdUniqueInputModel)
+export class ConnectUserToRoleModel {
   @ApiProperty({
-    type: UserToRoleUserIdRoleIdUniqueInputDto,
+    type: UserToRoleUserIdRoleIdUniqueInputModel,
   })
   @IsNotEmpty()
   @ValidateNested()
-  @Type(() => UserToRoleUserIdRoleIdUniqueInputDto)
-  userId_roleId: UserToRoleUserIdRoleIdUniqueInputDto;
+  @Type(() => UserToRoleUserIdRoleIdUniqueInputModel)
+  userId_roleId: UserToRoleUserIdRoleIdUniqueInputModel;
 }

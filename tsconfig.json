@@ -22,23 +22,20 @@
     "noEmit": true,
     "strictNullChecks": false,
     "paths": {
-      "@adapter": ["src/adapter"],
-      "@adapter/*": ["src/adapter/*"],
+      "@core": ["src/core"],
+      "@core/*": ["src/core/*"],
 
-      "@use-cases": ["src/use-cases"],
-      "@use-cases/*": ["src/use-cases/*"],
+      "@types": ["./src/core/generated"],
+      "@types/*": ["./src/core/generated/*"],
 
-      "@entities": ["src/core/entities"],
-      "@entities/*": ["src/core/entities/*"],
-      "@repositories": ["src/core/repositories"],
-      "@repositories/*": ["src/core/repositories/*"],
+      "@system": ["src/modules/system"],
+      "@system/*": ["src/modules/system/*"],
 
-      "@config": ["src/infra/config"],
-      "@config/*": ["src/infra/config/*"],
-      "@modules": ["src/infra/modules"],
-      "@modules/*": ["src/infra/modules/*"],
-      "@infra": ["src/infra"],
-      "@infra/*": ["src/infra/*"],
+      "@config": ["src/modules/system/config"],
+      "@config/*": ["src/modules/system/config/*"],
+
+      "@modules": ["src/modules"],
+      "@modules/*": ["src/modules/*"],
 
       "@shared": ["src/shared"],
       "@shared/*": ["src/shared/*"]

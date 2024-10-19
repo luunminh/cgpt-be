@@ -1,0 +1,377 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [uuidOssp(map: "uuid-ossp")]
+}
+
+generator nestjsDto {
+  provider                        = "prisma-generator-nestjs-dto"
+  output                          = "../../../core/generated"
+  outputToNestJsResourceStructure = "true"
+  flatResourceStructure           = "false"
+  exportRelationModifierClasses   = "true"
+  reExport                        = "true"
+  createDtoPrefix                 = "Create"
+  updateDtoPrefix                 = "Update"
+  dtoSuffix                       = "Model"
+  entityPrefix                    = ""
+  entitySuffix                    = "Entity"
+  classValidation                 = "true"
+  fileNamingStyle                 = "kebab"
+  noDependencies                  = "false"
+  outputType                      = "class"
+  prettier                        = "true"
+}
+
+enum UserType {
+  ADMIN
+  USER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum TransactionType {
+  EXPENSE
+  SETTLEMENT
+}
+
+enum SplitType {
+  EQUALLY
+  EXACTAMOUNT
+  PERCENTAGE
+  SHARE
+}
+
+enum GroupType {
+  TRIP
+  FAMILY
+  FRIENDS
+  WORK
+  OTHER
+}
+
+enum CategoryGroupType {
+  ENTERTAINMENT
+  FOOD
+  HOME
+  LIFE
+  TRANSPORTATION
+  UNCATEGORIZED
+  UTILIZED
+}
+
+model User {
+  id             String     @id(map: "pk_user") @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById    String?    @map("updated_by_id") @db.Uuid
+  firstName      String     @map("first_name") @db.VarChar(100)
+  lastName       String     @map("last_name") @db.VarChar(100)
+  middleName     String?    @map("middle_name") @db.VarChar(50)
+  username       String     @unique @map("username") @db.VarChar(100)
+  email          String     @unique @map("email") @db.VarChar(255)
+  fullName       String?    @map("full_name") @db.VarChar(255)
+  hashedPassword String     @map("hashed_password") @db.VarChar(1000)
+  status         UserStatus @default(ACTIVE) @map("status")
+  userType       UserType   @default(USER) @map("user_type")
+
+  // Relation
+  groupOwner         Group[]
+  verificationTokens VerificationToken[]
+  roles              UserToRole[]
+  groupMember        GroupMember[]
+  profile            Profile?
+  ownerTransaction   Transaction[]
+  comments           TransactionComment[]
+  transaction        TransactionParticipant[]
+  expenses           Ledger[]                 @relation("fk_ledger_user_from")
+  settlements        Ledger[]                 @relation("fk_ledger_user_to")
+
+  // Index
+  @@index([email], map: "ixuq_user_email")
+  @@map("user")
+}
+
+model VerificationToken {
+  id          String   @id(map: "pk_verification_token") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById String?  @map("updated_by_id") @db.Uuid
+  resource    String   @db.VarChar(255)
+  token       String   @db.VarChar(50)
+  expiration  DateTime @db.Timestamptz(6)
+  isVerified  Boolean  @default(false) @map("is_verified") @db.Boolean
+  isUsed      Boolean  @default(false) @map("is_used") @db.Boolean
+  userId      String   @map("user_id") @db.Uuid
+
+  // Relation
+  user User? @relation(fields: [userId], references: [id], map: "fk_verification_token_user")
+
+  @@index([userId], map: "ixfk_verification_token_user")
+  @@map("verification_token")
+}
+
+model Profile {
+  id          String   @id(map: "pk_profile") @map("id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById String?  @map("updated_by_id") @db.Uuid
+  phoneNumber String?  @map("phone_number") @db.VarChar(20)
+  avatarUrl   String?  @map("avatar_url") @db.VarChar(1000)
+  qrUrl       String?  @map("qr_url") @db.VarChar(1000)
+  address     String?  @map("address") @db.VarChar(500)
+
+  // Relation
+  user User @relation(fields: [id], references: [id], map: "fk_profile_user", onDelete: Cascade)
+
+  @@map("profile")
+}
+
+model Role {
+  id           String   @id(map: "pk_role") @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById  String?  @map("updated_by_id") @db.Uuid
+  name         String   @map("name") @db.VarChar(50)
+  displayName  String   @map("display_name") @db.VarChar(50)
+  description  String?  @map("description") @db.VarChar(255)
+  canBeUpdated Boolean  @default(true) @map("can_be_updated") @db.Boolean
+  canBeDeleted Boolean  @default(true) @map("can_be_deleted") @db.Boolean
+
+  // Relation
+  users       UserToRole[]
+  permissions RoleToPermission[]
+
+  @@map("role")
+}
+
+model UserToRole {
+  userId    String   @map("user_id") @db.Uuid
+  roleId    String   @map("role_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relation
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, map: "fk_user_to_role_user")
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade, map: "fk_user_to_role_role")
+
+  @@id([userId, roleId])
+  @@map("user_to_role")
+}
+
+model Permission {
+  id                Int      @id(map: "pk_permission") @default(autoincrement()) @db.Integer
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById       String?  @map("updated_by_id") @db.Uuid
+  resourceName      String   @map("resource_name") @db.VarChar(50)
+  displayName       String   @map("display_name") @db.VarChar(50)
+  description       String?  @map("description") @db.VarChar(255)
+  canCreate         Boolean  @default(false) @map("can_create") @db.Boolean
+  canRead           Boolean  @default(false) @map("can_read") @db.Boolean
+  canUpdate         Boolean  @default(false) @map("can_update") @db.Boolean
+  canDelete         Boolean  @default(false) @map("can_delete") @db.Boolean
+  permissionGroupId Int?     @map("permission_group_id") @db.Integer
+
+  // Relation
+  roles           RoleToPermission[]
+  permissionGroup PermissionGroup?   @relation(fields: [permissionGroupId], references: [id], map: "fk_permission_permission_group")
+
+  @@map("permission")
+}
+
+model PermissionGroup {
+  id           Int      @id(map: "pk_permission_info") @default(autoincrement()) @db.Integer
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById  String?  @map("updated_by_id") @db.Uuid
+  resourceName String   @map("resource_name") @db.VarChar(50)
+  description  String?  @map("description") @db.VarChar(255)
+
+  // Relation
+  permissions Permission[]
+
+  @@map("permission_group")
+}
+
+model RoleToPermission {
+  roleId       String   @map("role_id") @db.Uuid
+  permissionId Int      @map("permission_id") @db.Integer
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById  String?  @map("updated_by_id") @db.Uuid
+
+  // Relation
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade, map: "fk_role_to_permission_role")
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade, map: "fk_role_to_permission_permission")
+
+  @@id([roleId, permissionId])
+  @@map("role_to_permission")
+}
+
+model Group {
+  id           String    @id(map: "pk_group") @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById  String?   @map("updated_by_id") @db.Uuid
+  group_name   String    @map("group_name") @db.VarChar(100)
+  description  String?   @map("description") @db.VarChar(255)
+  avatarUrl    String?   @map("avatar_url") @db.VarChar(1000)
+  groupType    GroupType @map("group_type")
+  ownerId      String    @map("owner_id") @db.Uuid
+  lkCurrencyId String?   @map("lk_currency_id") @db.VarChar(100)
+
+  // Relation
+  members      GroupMember[]
+  transactions Transaction[]
+  country      LkCountry?    @relation(fields: [lkCurrencyId], references: [id], map: "fk_group_country")
+  owner        User          @relation(fields: [ownerId], references: [id], onDelete: Cascade, map: "fk_group_owner")
+
+  // Index
+  @@index([ownerId], map: "ixuq_group_id")
+  @@index([group_name], map: "ixuq_group_group_name")
+  @@map("group")
+}
+
+model GroupMember {
+  memberId    String   @map("member_id") @db.Uuid
+  groupId     String   @map("group_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById String?  @map("updated_by_id") @db.Uuid
+
+  // Relation
+  member User  @relation(fields: [memberId], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "fk_group_member_member")
+  group  Group @relation(fields: [groupId], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "fk_group_member_group")
+
+  @@id([memberId, groupId])
+  // Index
+  @@index([memberId], map: "ixuq_group_member")
+  @@map("group_member")
+}
+
+model Transaction {
+  id              String          @id(map: "pk_transaction") @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  createdAt       DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById     String?         @map("updated_by_id") @db.Uuid
+  transactionType TransactionType @map("transaction_type")
+  groupId         String          @map("group_id") @db.Uuid
+  ownerUserId     String          @map("owner_user_id") @db.Uuid
+
+  // Relation
+  group              Group                    @relation(fields: [groupId], references: [id], onDelete: Cascade, map: "fk_transaction_group")
+  owner              User                     @relation(fields: [ownerUserId], references: [id], onDelete: Cascade, map: "fk_transaction_owner")
+  expenseTransaction ExpenseTransaction[]
+  comments           TransactionComment[]
+  participants       TransactionParticipant[]
+  ledgers            Ledger[]
+
+  @@index([groupId], map: "ixid_transaction_group_id")
+  @@map("transaction")
+}
+
+model ExpenseTransaction {
+  id            String    @id(map: "pk_expense_transaction") @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById   String?   @map("updated_by_id") @db.Uuid
+  splitType     SplitType @map("split_type")
+  lkCategoryId  String?   @map("lk_category_id") @db.Uuid
+  transactionId String    @map("transaction_id") @db.Uuid
+
+  // Relation
+  transaction Transaction        @relation(fields: [transactionId], references: [id], onDelete: Cascade, map: "fk_expense_transaction_transaction")
+  category    LKExpenseCategory? @relation(fields: [lkCategoryId], references: [id], map: "fk_expense_transaction_category")
+
+  @@map("expense_transaction")
+}
+
+model TransactionComment {
+  id            String   @id(map: "pk_transaction_comment") @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById   String?  @map("updated_by_id") @db.Uuid
+  transactionId String   @map("transaction_id") @db.Uuid
+  ownerUserId   String   @map("owner_user_id") @db.Uuid
+  content       Json     @map("content") @db.Json
+
+  // Relation
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade, map: "fk_transaction_comment_transaction")
+  owner       User        @relation(fields: [ownerUserId], references: [id], onDelete: Cascade, map: "fk_transaction_comment_owner")
+
+  @@map("transaction_comment")
+}
+
+model TransactionParticipant {
+  userId        String   @map("user_id") @db.Uuid
+  transactionId String   @map("transaction_id") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById   String?  @map("updated_by_id") @db.Uuid
+
+  // Relation
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade, map: "fk_transaction_participant_user")
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade, map: "fk_transaction_participant_transaction")
+
+  @@id([userId, transactionId])
+  @@map("transaction_participant")
+}
+
+model Ledger {
+  id            String   @id(map: "pk_ledger") @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById   String?  @map("updated_by_id") @db.Uuid
+  amount        Decimal  @map("amount") @db.Money
+  userIdFrom    String   @map("user_id_from") @db.Uuid
+  userIdTo      String   @map("user_id_to") @db.Uuid
+  transactionId String   @map("transaction_id") @db.Uuid
+
+  // Relation
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade, map: "fk_ledger_transaction")
+  userFrom    User        @relation("fk_ledger_user_from", fields: [userIdFrom], references: [id], onDelete: Cascade, map: "fk_ledger_user_from")
+  userTo      User        @relation("fk_ledger_user_to", fields: [userIdTo], references: [id], onDelete: Cascade, map: "fk_ledger_user_to")
+
+  @@index([userIdFrom(sort: Asc)], map: "ixid_ledger_user_id_from")
+  @@index([userIdTo(sort: Asc)], map: "ixid_ledger_user_id_to")
+  @@map("ledger")
+}
+
+// https://gist.github.com/voskobovich/43f851859c23a8261514
+model LkCountry {
+  id             String   @id(map: "pk_country") @map("id") @db.VarChar(100)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById    String?  @map("updated_by_id") @db.Uuid
+  name           String   @map("name") @db.VarChar(100)
+  currencyCode   String   @map("currency_code") @db.VarChar(3)
+  currencySymbol String   @map("currency_symbol") @db.VarChar(5)
+
+  // Relation
+  groups Group[]
+
+  @@map("lk_country")
+}
+
+model LKExpenseCategory {
+  id          String            @id(map: "pk_expense_category") @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById String?           @map("updated_by_id") @db.Uuid
+  type        CategoryGroupType @map("type")
+  name        String            @map("name") @db.VarChar(100)
+
+  // Relation
+  expenses ExpenseTransaction[]
+
+  @@map("lk_expense_category")
+}

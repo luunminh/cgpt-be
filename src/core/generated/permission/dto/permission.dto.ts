@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class PermissionDto {
+export class PermissionModel {
   @ApiProperty({
     type: 'integer',
     format: 'int32',

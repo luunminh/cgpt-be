@@ -2,7 +2,7 @@ import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class RoleToPermissionRoleIdPermissionIdUniqueInputDto {
+export class RoleToPermissionRoleIdPermissionIdUniqueInputModel {
   @ApiProperty({
     type: 'string',
   })
@@ -18,13 +18,13 @@ export class RoleToPermissionRoleIdPermissionIdUniqueInputDto {
   permissionId: number;
 }
 
-@ApiExtraModels(RoleToPermissionRoleIdPermissionIdUniqueInputDto)
-export class ConnectRoleToPermissionDto {
+@ApiExtraModels(RoleToPermissionRoleIdPermissionIdUniqueInputModel)
+export class ConnectRoleToPermissionModel {
   @ApiProperty({
-    type: RoleToPermissionRoleIdPermissionIdUniqueInputDto,
+    type: RoleToPermissionRoleIdPermissionIdUniqueInputModel,
   })
   @IsNotEmpty()
   @ValidateNested()
-  @Type(() => RoleToPermissionRoleIdPermissionIdUniqueInputDto)
-  roleId_permissionId: RoleToPermissionRoleIdPermissionIdUniqueInputDto;
+  @Type(() => RoleToPermissionRoleIdPermissionIdUniqueInputModel)
+  roleId_permissionId: RoleToPermissionRoleIdPermissionIdUniqueInputModel;
 }

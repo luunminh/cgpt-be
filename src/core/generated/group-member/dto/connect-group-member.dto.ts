@@ -2,7 +2,7 @@ import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class GroupMemberMemberIdGroupIdUniqueInputDto {
+export class GroupMemberMemberIdGroupIdUniqueInputModel {
   @ApiProperty({
     type: 'string',
   })
@@ -17,13 +17,13 @@ export class GroupMemberMemberIdGroupIdUniqueInputDto {
   groupId: string;
 }
 
-@ApiExtraModels(GroupMemberMemberIdGroupIdUniqueInputDto)
-export class ConnectGroupMemberDto {
+@ApiExtraModels(GroupMemberMemberIdGroupIdUniqueInputModel)
+export class ConnectGroupMemberModel {
   @ApiProperty({
-    type: GroupMemberMemberIdGroupIdUniqueInputDto,
+    type: GroupMemberMemberIdGroupIdUniqueInputModel,
   })
   @IsNotEmpty()
   @ValidateNested()
-  @Type(() => GroupMemberMemberIdGroupIdUniqueInputDto)
-  memberId_groupId: GroupMemberMemberIdGroupIdUniqueInputDto;
+  @Type(() => GroupMemberMemberIdGroupIdUniqueInputModel)
+  memberId_groupId: GroupMemberMemberIdGroupIdUniqueInputModel;
 }

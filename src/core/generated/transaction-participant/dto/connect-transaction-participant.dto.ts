@@ -2,7 +2,7 @@ import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class TransactionParticipantUserIdTransactionIdUniqueInputDto {
+export class TransactionParticipantUserIdTransactionIdUniqueInputModel {
   @ApiProperty({
     type: 'string',
   })
@@ -17,13 +17,13 @@ export class TransactionParticipantUserIdTransactionIdUniqueInputDto {
   transactionId: string;
 }
 
-@ApiExtraModels(TransactionParticipantUserIdTransactionIdUniqueInputDto)
-export class ConnectTransactionParticipantDto {
+@ApiExtraModels(TransactionParticipantUserIdTransactionIdUniqueInputModel)
+export class ConnectTransactionParticipantModel {
   @ApiProperty({
-    type: TransactionParticipantUserIdTransactionIdUniqueInputDto,
+    type: TransactionParticipantUserIdTransactionIdUniqueInputModel,
   })
   @IsNotEmpty()
   @ValidateNested()
-  @Type(() => TransactionParticipantUserIdTransactionIdUniqueInputDto)
-  userId_transactionId: TransactionParticipantUserIdTransactionIdUniqueInputDto;
+  @Type(() => TransactionParticipantUserIdTransactionIdUniqueInputModel)
+  userId_transactionId: TransactionParticipantUserIdTransactionIdUniqueInputModel;
 }

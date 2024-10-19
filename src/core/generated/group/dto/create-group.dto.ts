@@ -2,7 +2,7 @@ import { GroupType } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class CreateGroupDto {
+export class CreateGroupModel {
   @ApiProperty({
     type: 'string',
     required: false,

@@ -4,15 +4,15 @@ import {
   JSON_LIMIT,
   SERVER_ALIVE_TIMEOUT,
 } from '@config';
-import { configureSwagger } from '@infra/swagger';
-import { AppModule } from '@modules';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { GlobalExceptionFilter } from '@shared/filters';
 import { TimeoutInterceptor } from '@shared/interceptors';
+import { configureSwagger } from '@system/swagger';
 import compression from 'compression';
 import { json, urlencoded } from 'express';
 import helmet from 'helmet';
+import { AppModule } from 'src/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
