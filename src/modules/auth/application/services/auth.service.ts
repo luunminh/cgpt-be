@@ -1,6 +1,7 @@
 import { UserEntity } from '@core/generated';
-import { IUserRepository, UserRepositoryToken } from '@modules/user/domain';
+import { IUserRepository, UserRepositoryToken } from '@modules/user';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { UserType } from '@prisma/client';
 import { ISignupDto } from '../..';
 import { JwtAdapter } from '../../domain/adapter';
 import {
@@ -16,10 +17,10 @@ export class AuthService implements IAuthRepository {
   constructor(
     @Inject(JwtRepositoryToken)
     private jwtAdapter: JwtAdapter,
-    @Inject(UserRepositoryToken)
-    private userRepository: IUserRepository,
     @Inject(CacheManagerRepositoryToken)
     private cacheManager: ICacheManagerRepository,
+    @Inject(UserRepositoryToken)
+    private userRepository: IUserRepository,
   ) {}
 
   async login(username: string, password: string) {
@@ -57,6 +58,12 @@ export class AuthService implements IAuthRepository {
     }
 
     const tokens = await this.jwtAdapter.generateTokens(user);
+
+    await this.cacheManager.save(
+      user.id,
+      this.jwtAdapter.mappingToReqUser(user).permissions,
+    );
+
     return tokens;
   }
 
@@ -90,13 +97,20 @@ export class AuthService implements IAuthRepository {
       email,
       firstName,
       lastName,
-      password: hashedPassword,
+      hashedPassword,
     };
 
-    await this.userRepository.insert(payload as any);
+    await this.userRepository.insert({
+      ...payload,
+      userType: UserType.USER,
+    } as any);
   }
 
   async logout(userId: string) {
+    if (!userId) {
+      throw new BadRequestException('Request User not found!');
+    }
+
     return await this.cacheManager.clear(userId);
   }
 

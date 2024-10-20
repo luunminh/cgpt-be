@@ -2,7 +2,7 @@ import { ConfigFactory } from '@config';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import type { Cache } from 'cache-manager';
-import { ICacheManagerRepository } from '../repositories';
+import { ICacheManagerRepository } from '../repositories/cache-manager.repository';
 
 @Injectable()
 export class CacheManagerAdapter implements ICacheManagerRepository {
@@ -25,7 +25,6 @@ export class CacheManagerAdapter implements ICacheManagerRepository {
     const rights: string[] | undefined = await this.cacheManager.get<
       string[] | undefined
     >(CacheManagerAdapter.generateKey(userId));
-
     return rights ?? [];
   }
 

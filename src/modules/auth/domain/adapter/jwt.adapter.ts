@@ -1,17 +1,22 @@
 import { UserEntity } from '@core/generated';
-import { extractJwtPayload } from '@modules/auth/infra';
-import { IUserRepository, UserRepositoryToken } from '@modules/user';
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigFactory } from '@system/config';
-import { compare, hash } from 'bcryptjs';
-import { RequestUser } from '../..';
+import { RequestUser } from '@modules/auth/application';
 import {
   CacheManagerRepositoryToken,
   ICacheManagerRepository,
   IJwtRepository,
-} from '../../domain';
-import { AuthCredentials } from '../../domain/value-objects';
+} from '@modules/auth/domain/repositories';
+import { AuthCredentials } from '@modules/auth/domain/value-objects';
+import { extractJwtPayload } from '@modules/auth/infra/utils';
+import { IUserRepository, UserRepositoryToken } from '@modules/user';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigFactory } from '@system/config';
+import { compare, hash } from 'bcryptjs';
 
 @Injectable()
 export class JwtAdapter implements IJwtRepository {
@@ -63,12 +68,40 @@ export class JwtAdapter implements IJwtRepository {
     try {
       const reqUser = await this.jwtService.verifyAsync<RequestUser>(token);
 
-      const user = await this.userRepository.findById(reqUser.id);
+      const user = (await this.userRepository.findByWhereConditions({
+        conditions: { id: reqUser.id },
+        select: {
+          roles: {
+            include: {
+              role: {
+                include: {
+                  permissions: {
+                    select: {
+                      permission: {
+                        select: {
+                          displayName: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })) as UserEntity;
 
-      const [tokens] = await Promise.all([this.generateTokens(user, token)]);
+      const [tokens] = await Promise.all([
+        this.generateTokens(user, token),
+        this.cacheManager.save(
+          reqUser.id,
+          this.mappingToReqUser(user).permissions,
+        ),
+      ]);
 
       return tokens;
     } catch (error) {
+      Logger.log(error);
       const jwtPayload = extractJwtPayload(token);
 
       if (!jwtPayload) {
@@ -86,8 +119,8 @@ export class JwtAdapter implements IJwtRepository {
       id: user.id,
       username: user.username,
       email: user.email,
-      roles: user.roles.map((r) => r.role.displayName),
-      permissions: user.roles.flatMap((r) =>
+      roles: user.roles?.map((r) => r.role.displayName),
+      permissions: user?.roles.flatMap((r) =>
         r.role.permissions.map((p) => p.permission.displayName),
       ),
     };

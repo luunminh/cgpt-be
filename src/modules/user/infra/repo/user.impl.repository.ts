@@ -1,6 +1,8 @@
+/* eslint-disable security/detect-object-injection */
 import { CommandEntity } from '@core/domain-base';
+import { MapRoleByUserType } from '@modules/user/domain';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, UserStatus } from '@prisma/client';
 import {
   PaginatedApiResponseDto,
   Pagination,
@@ -109,21 +111,39 @@ export class UserRepository implements IUserRepository {
       username,
       email,
       fullName,
+      userType,
       hashedPassword,
-      status,
+      status = UserStatus.ACTIVE,
     } = entity || {};
 
-    return this.dbCtx.user.create({
-      data: {
-        firstName,
-        lastName,
-        middleName,
-        username,
-        email,
-        fullName,
-        hashedPassword,
-        status,
-      },
+    return this.transaction<UserEntity>(async (trx) => {
+      const role = await trx.role.findFirst({
+        where: {
+          name: MapRoleByUserType[userType],
+        },
+      });
+
+      return await this.dbCtx.user.create({
+        data: {
+          firstName,
+          lastName,
+          middleName,
+          username,
+          email,
+          fullName,
+          hashedPassword,
+          userType,
+          status,
+          roles: {
+            create: {
+              roleId: role.id,
+            },
+          },
+          profile: {
+            create: {},
+          },
+        },
+      });
     });
   }
 

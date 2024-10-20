@@ -22,9 +22,12 @@ export class AuthStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: RequestUser): RequestUser {
-    if (!this.isValidCache(payload.id))
+  async validate(payload: RequestUser): Promise<RequestUser> {
+    const isValid = await this.isValidCache(payload.id);
+
+    if (!isValid) {
       throw new UnauthorizedException('Unauthorized');
+    }
 
     return payload;
   }
@@ -36,8 +39,9 @@ export class AuthStrategy extends PassportStrategy(Strategy) {
    * @returns
    */
   private async isValidCache(userId: string) {
-    const hasExit = await !!this.cacheManager.get(userId);
+    const permissions = await this.cacheManager.get(userId);
 
+    const hasExit = permissions.length > 0;
     return hasExit;
   }
 }

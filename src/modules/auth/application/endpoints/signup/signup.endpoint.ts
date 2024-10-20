@@ -8,14 +8,14 @@ import { SignupRequestBody } from './signup.request-body';
 @ApiTags('Auth')
 @ApiBearerAuth()
 @Controller({
-  path: 'signup',
+  path: 'auth',
 })
 @UseInterceptors(ResponseInterceptor)
 export class SignupEndpoint {
   constructor(private commandBus: CommandBus) {}
 
   @ApiOperation({ description: 'Sign up' })
-  @Post()
+  @Post('signup')
   create(@Body() body: SignupRequestBody) {
     return this.commandBus.execute<SignupCommand, void>(
       new SignupCommand(body),

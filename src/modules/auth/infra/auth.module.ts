@@ -1,12 +1,11 @@
+import { AuthService } from '@modules/auth/application';
+import { CacheManagerAdapter, JwtAdapter } from '@modules/auth/domain/adapter';
 import { UserModule } from '@modules/user';
-import { forwardRef, Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigFactory } from '@system';
-import { DatabaseModule } from '@system/database';
+import { ConfigFactory, DatabaseModule } from '@system';
 import * as useCases from '../application/endpoints';
-import { AuthService } from '../application/services';
-import { CacheManagerAdapter, JwtAdapter } from '../domain/adapter';
 import {
   CacheManagerRepositoryToken,
   JwtRepositoryToken,
@@ -43,6 +42,5 @@ const handlers = applications.filter((x) => x.name.endsWith('Handler'));
     AuthService,
     ...handlers,
   ],
-  exports: [],
 })
 export class AuthModule {}

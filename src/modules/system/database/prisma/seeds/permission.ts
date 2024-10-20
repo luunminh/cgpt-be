@@ -89,8 +89,8 @@ export async function seedPermissionsAndAdmin() {
             data: g.permissions.map((p) => ({
               resourceName: g.resourceName,
               displayName: `${g.resourceName}:${p}`,
-              //@ts-expect-error
-              description: `Allow to ${ResourceAction[`${p}`.toLowerCase()]} ${g.resourceName}`,
+              //@ts-ignore
+              description: `Allow to ${ResourceAction[p.toLowerCase()]} ${g.resourceName}`,
               canCreate: p === 'C',
               canRead: p === 'R',
               canUpdate: p === 'U',
@@ -157,7 +157,7 @@ export async function seedPermissionsAndAdmin() {
         return g.permissions.map((p) => ({
           resourceName: g.resourceName,
           displayName: `${g.resourceName}:${p}`,
-          //@ts-expect-error
+          //@ts-ignore
           description: `Allow to ${ResourceAction[`${p}`.toLowerCase()]} ${g.resourceName}`,
           canCreate: p === 'C',
           canRead: p === 'R',

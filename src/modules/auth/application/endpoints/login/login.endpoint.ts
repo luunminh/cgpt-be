@@ -9,14 +9,14 @@ import { LoginResponse } from './login.response';
 @ApiTags('Auth')
 @ApiBearerAuth()
 @Controller({
-  path: 'login',
+  path: 'auth',
 })
 @UseInterceptors(ResponseInterceptor)
 export class LoginEndpoint {
   constructor(private commandBus: CommandBus) {}
 
   @ApiOperation({ description: 'Login' })
-  @Post()
+  @Post('login')
   async create(@Body() body: LoginRequestBody) {
     return this.commandBus.execute<LoginCommand, LoginResponse>(
       new LoginCommand(body),

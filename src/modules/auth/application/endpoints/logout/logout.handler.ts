@@ -8,6 +8,6 @@ export class LogoutHandler implements ICommandHandler<LogoutCommand> {
 
   async execute(command: LogoutCommand) {
     const { user } = command;
-    return await this.authService.logout(user.id);
+    return await this.authService.logout(user?.id);
   }
 }

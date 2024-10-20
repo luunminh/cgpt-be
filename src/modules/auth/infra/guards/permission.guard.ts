@@ -1,6 +1,5 @@
 import { CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import type { Request } from 'express';
 import { Observable } from 'rxjs';
 import { CAN_ACCESS_METADATA_KEY } from '../decorators';
 
@@ -17,7 +16,7 @@ export class PermissionGuard implements CanActivate {
     if (!routePermissions) {
       return true;
     }
-    const request = context.switchToHttp().getRequest<Request>();
+    const request = context.switchToHttp().getRequest<any>();
 
     const { user } = request;
 

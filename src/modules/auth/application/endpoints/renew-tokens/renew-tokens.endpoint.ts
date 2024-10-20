@@ -9,14 +9,14 @@ import { RenewTokensResponse } from './renew-tokens.response';
 @ApiTags('Auth')
 @ApiBearerAuth()
 @Controller({
-  path: 'renew-tokens',
+  path: 'auth',
 })
 @UseInterceptors(ResponseInterceptor)
 export class RenewTokensEndpoint {
   constructor(private commandBus: CommandBus) {}
 
   @ApiOperation({ description: 'RenewTokens' })
-  @Post()
+  @Post('renew-tokens')
   async create(@Body() body: RenewTokensRequestBody) {
     return this.commandBus.execute<RenewTokensCommand, RenewTokensResponse>(
       new RenewTokensCommand(body),
