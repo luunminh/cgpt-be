@@ -16,11 +16,9 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigFactory } from '@system/config';
-import { compare, hash } from 'bcryptjs';
 
 @Injectable()
 export class JwtAdapter implements IJwtRepository {
-  private readonly saltRounds: number;
   private readonly accessTokenExpiresIn: number;
   private readonly refreshTokenExpiresIn: number;
 
@@ -32,7 +30,6 @@ export class JwtAdapter implements IJwtRepository {
     private readonly config: ConfigFactory,
     private readonly jwtService: JwtService,
   ) {
-    this.saltRounds = this.config.getSaltRounds();
     this.accessTokenExpiresIn = this.config.getACExpiration();
     this.refreshTokenExpiresIn = this.config.getRFExpiration();
   }
@@ -56,19 +53,11 @@ export class JwtAdapter implements IJwtRepository {
     return { accessToken, refreshToken };
   }
 
-  async generateHash(data: string) {
-    return hash(data, this.saltRounds);
-  }
-
-  async compare(data: string, encrypted: string): Promise<boolean> {
-    return compare(data, encrypted);
-  }
-
   async renewTokens(token: string): Promise<AuthCredentials> {
     try {
       const reqUser = await this.jwtService.verifyAsync<RequestUser>(token);
 
-      const user = (await this.userRepository.findByWhereConditions({
+      const user = await this.userRepository.findByWhereConditions<UserEntity>({
         conditions: { id: reqUser.id },
         select: {
           roles: {
@@ -89,7 +78,7 @@ export class JwtAdapter implements IJwtRepository {
             },
           },
         },
-      })) as UserEntity;
+      });
 
       const [tokens] = await Promise.all([
         this.generateTokens(user, token),

@@ -3,7 +3,7 @@ import { IUserRepository, UserRepositoryToken } from '@modules/user';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { UserType } from '@prisma/client';
 import { ISignupDto } from '../..';
-import { JwtAdapter } from '../../domain/adapter';
+import { JwtAdapter, PasswordManagerAdapter } from '../../domain/adapter';
 import {
   CacheManagerRepositoryToken,
   IAuthRepository,
@@ -21,6 +21,7 @@ export class AuthService implements IAuthRepository {
     private cacheManager: ICacheManagerRepository,
     @Inject(UserRepositoryToken)
     private userRepository: IUserRepository,
+    private readonly pwManager: PasswordManagerAdapter,
   ) {}
 
   async login(username: string, password: string) {
@@ -51,7 +52,7 @@ export class AuthService implements IAuthRepository {
     });
 
     const isValidUser =
-      !!user && (await this.jwtAdapter.compare(password, user.hashedPassword));
+      !!user && (await this.pwManager.compare(password, user.hashedPassword));
 
     if (!isValidUser) {
       throw new BadRequestException('Invalid Credentials, please try again!');
@@ -90,7 +91,7 @@ export class AuthService implements IAuthRepository {
       );
     }
 
-    const hashedPassword = await this.jwtAdapter.generateHash(password);
+    const hashedPassword = await this.pwManager.generate(password);
 
     const payload = {
       username,

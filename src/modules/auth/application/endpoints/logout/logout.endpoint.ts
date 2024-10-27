@@ -1,6 +1,6 @@
 import { Controller, Post, UseInterceptors } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ResponseInterceptor } from 'src/shared/http';
 import { Identified, ReqUser } from '../../../infra/decorators';
 import { RequestUser } from '../../dtos';
@@ -8,7 +8,6 @@ import { LogoutCommand } from './logout.command';
 import { LogoutResponse } from './logout.response';
 
 @ApiTags('Auth')
-@ApiBearerAuth()
 @Controller({
   path: 'auth',
 })

@@ -17,19 +17,6 @@ export interface IJwtRepository {
   ): Promise<AuthCredentials>;
 
   /**
-   * Generate hash for the data
-   * @param data
-   */
-  generateHash(data: string): Promise<string>;
-
-  /**
-   * Compare the data with the encrypted data
-   * @param data
-   * @param boolean
-   */
-  compare(data: string, encrypted: string): Promise<boolean>;
-
-  /**
    * Mapping user to RequestUser (including necessary fields for token generation)
    * @param user
    * @returns RequestUser

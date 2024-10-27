@@ -147,7 +147,7 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  async insertMany(entities: CommandEntity<UserEntity[]>): Promise<void> {
+  async insertMany(entities: UserEntity[]): Promise<void> {
     await this.dbCtx.user.createMany({
       data: entities,
     });
@@ -164,6 +164,7 @@ export class UserRepository implements IUserRepository {
       fullName,
       hashedPassword,
       status,
+      profile,
     } = entity;
 
     return this.dbCtx.user.update({
@@ -177,6 +178,7 @@ export class UserRepository implements IUserRepository {
         fullName,
         hashedPassword,
         status,
+        ...(profile && profile),
       },
     });
   }
