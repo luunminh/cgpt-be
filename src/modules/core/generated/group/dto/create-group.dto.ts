@@ -5,6 +5,12 @@ import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 export class CreateGroupModel {
   @ApiProperty({
     type: 'string',
+  })
+  @IsNotEmpty()
+  @IsString()
+  slug: string;
+  @ApiProperty({
+    type: 'string',
     required: false,
     nullable: true,
   })
@@ -16,7 +22,7 @@ export class CreateGroupModel {
   })
   @IsNotEmpty()
   @IsString()
-  group_name: string;
+  groupName: string;
   @ApiProperty({
     type: 'string',
     required: false,

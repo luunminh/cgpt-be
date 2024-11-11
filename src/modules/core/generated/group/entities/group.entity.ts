@@ -12,6 +12,10 @@ export class GroupEntity {
   id: string;
   @ApiProperty({
     type: 'string',
+  })
+  slug: string;
+  @ApiProperty({
+    type: 'string',
     format: 'date-time',
   })
   createdAt: Date;
@@ -28,7 +32,7 @@ export class GroupEntity {
   @ApiProperty({
     type: 'string',
   })
-  group_name: string;
+  groupName: string;
   @ApiProperty({
     type: 'string',
     nullable: true,

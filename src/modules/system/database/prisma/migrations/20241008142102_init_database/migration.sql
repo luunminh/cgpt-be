@@ -315,10 +315,10 @@ ALTER TABLE "expense_transaction" ADD CONSTRAINT "fk_expense_transaction_transac
 ALTER TABLE "expense_transaction" ADD CONSTRAINT "fk_expense_transaction_category" FOREIGN KEY ("lk_category_id") REFERENCES "lk_expense_category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "TransactionComment" ADD CONSTRAINT "fk_transaction_comment_transaction" FOREIGN KEY ("transaction_id") REFERENCES "transaction"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "transaction_comment" ADD CONSTRAINT "fk_transaction_comment_transaction" FOREIGN KEY ("transaction_id") REFERENCES "transaction"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "TransactionComment" ADD CONSTRAINT "fk_transaction_comment_owner" FOREIGN KEY ("owner_user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "transaction_comment" ADD CONSTRAINT "fk_transaction_comment_owner" FOREIGN KEY ("owner_user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "transaction_participant" ADD CONSTRAINT "fk_transaction_participant_user" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;

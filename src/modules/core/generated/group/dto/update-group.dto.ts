@@ -6,6 +6,13 @@ export class UpdateGroupModel {
   @ApiProperty({
     type: 'string',
     required: false,
+  })
+  @IsOptional()
+  @IsString()
+  slug?: string;
+  @ApiProperty({
+    type: 'string',
+    required: false,
     nullable: true,
   })
   @IsOptional()
@@ -17,7 +24,7 @@ export class UpdateGroupModel {
   })
   @IsOptional()
   @IsString()
-  group_name?: string;
+  groupName?: string;
   @ApiProperty({
     type: 'string',
     required: false,

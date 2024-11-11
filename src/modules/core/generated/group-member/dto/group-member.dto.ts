@@ -1,6 +1,11 @@
+import { GroupMemberStatus } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GroupMemberModel {
+  @ApiProperty({
+    enum: GroupMemberStatus,
+  })
+  status: GroupMemberStatus;
   @ApiProperty({
     type: 'string',
     format: 'date-time',

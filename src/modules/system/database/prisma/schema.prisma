@@ -33,6 +33,12 @@ enum UserType {
   USER
 }
 
+enum GroupMemberStatus {
+  WAITING_APPROVAL
+  ACTIVE
+  INACTIVE
+}
+
 enum UserStatus {
   ACTIVE
   INACTIVE
@@ -219,10 +225,11 @@ model RoleToPermission {
 
 model Group {
   id           String    @id(map: "pk_group") @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  slug         String    @unique @map("slug") @db.VarChar(100)
   createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
   updatedById  String?   @map("updated_by_id") @db.Uuid
-  group_name   String    @map("group_name") @db.VarChar(100)
+  groupName    String    @map("group_name") @db.VarChar(100)
   description  String?   @map("description") @db.VarChar(255)
   avatarUrl    String?   @map("avatar_url") @db.VarChar(1000)
   groupType    GroupType @map("group_type")
@@ -237,16 +244,17 @@ model Group {
 
   // Index
   @@index([ownerId], map: "ixuq_group_id")
-  @@index([group_name], map: "ixuq_group_group_name")
+  @@index([groupName], map: "ixuq_group_group_name")
   @@map("group")
 }
 
 model GroupMember {
-  memberId    String   @map("member_id") @db.Uuid
-  groupId     String   @map("group_id") @db.Uuid
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  updatedById String?  @map("updated_by_id") @db.Uuid
+  memberId    String            @map("member_id") @db.Uuid
+  groupId     String            @map("group_id") @db.Uuid
+  status      GroupMemberStatus @default(WAITING_APPROVAL) @map("status")
+  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedById String?           @map("updated_by_id") @db.Uuid
 
   // Relation
   member User  @relation(fields: [memberId], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "fk_group_member_member")
@@ -254,7 +262,7 @@ model GroupMember {
 
   @@id([memberId, groupId])
   // Index
-  @@index([memberId], map: "ixuq_group_member")
+  @@index([status], map: "ixuq_group_member_status")
   @@map("group_member")
 }
 
@@ -275,7 +283,6 @@ model Transaction {
   participants       TransactionParticipant[]
   ledgers            Ledger[]
 
-  @@index([groupId], map: "ixid_transaction_group_id")
   @@map("transaction")
 }
 
