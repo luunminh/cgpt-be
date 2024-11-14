@@ -1,15 +1,40 @@
+import { LkCountryModel } from '@core/generated/lk-country/dto';
+import { LKExpenseCategoryModel } from '@core/generated/lkexpense-category/dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { CategoryGroupType } from '@prisma/client';
 
 export class GetContentsResponse {
   @ApiProperty({
-    description: 'ID',
-    example: '487971f1-018d-4973-bd50-4743bd716559',
+    type: LkCountryModel,
+    isArray: true,
   })
-  id: string;
+  countryOptions: LkCountryModel[];
 
   @ApiProperty({
-    description: 'Updated at',
-    example: '2022-01-19T17:23:30.530Z',
+    type: LKExpenseCategoryModel,
+    isArray: true,
+    example: {
+      ENTERTAINMENT: [
+        {
+          id: 'string',
+          createdAt: '2024-11-14T14:16:06.240Z',
+          updatedAt: '2024-11-14T14:16:06.240Z',
+          updatedById: 'string',
+          type: 'ENTERTAINMENT',
+          name: 'string',
+        },
+      ],
+      FOOD: [
+        {
+          id: 'string',
+          createdAt: '2024-11-14T14:16:06.240Z',
+          updatedAt: '2024-11-14T14:16:06.240Z',
+          updatedById: 'string',
+          type: 'ENTERTAINMENT',
+          name: 'string',
+        },
+      ],
+    },
   })
-  updatedAt: Date;
+  expenseCategoryOptions: Record<CategoryGroupType, LKExpenseCategoryModel[]>;
 }

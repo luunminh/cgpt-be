@@ -1,7 +1,7 @@
 import { RequestUser } from '@modules/auth';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { GroupMemberStatus, GroupType } from '@prisma/client';
-import { GroupRepository } from '../../../domain';
+import { generateGroupSlug, GroupRepository } from '../../../domain';
 import { CreateGroupCommand } from './create-group.command';
 import { CreateGroupRequestBody } from './create-group.request-body';
 import { CreateGroupResponse } from './create-group.response';

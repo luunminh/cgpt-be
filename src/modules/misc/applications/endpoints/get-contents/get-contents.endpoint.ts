@@ -16,12 +16,12 @@ import { GetContentsResponse } from './get-contents.response';
 export class GetContentsEndpoint {
   constructor(protected queryBus: QueryBus) {}
 
-  @ApiOperation({ description: 'GetContents' })
+  @ApiOperation({ description: 'Get Contents' })
   @ApiResponse(GetContentsResponse)
   @Get()
-  get(@ReqUser() user: RequestUser): Promise<GetContentsResponse[]> {
-    return this.queryBus.execute<GetContentsQuery, GetContentsResponse[]>(
-      new GetContentsQuery(user.id),
+  get(@ReqUser() user: RequestUser): Promise<GetContentsResponse> {
+    return this.queryBus.execute<GetContentsQuery, GetContentsResponse>(
+      new GetContentsQuery(user?.id),
     );
   }
 }
