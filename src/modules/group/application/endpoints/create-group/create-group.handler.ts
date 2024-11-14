@@ -30,6 +30,8 @@ export class CreateGroupHandler
       description,
     } = body;
 
+    const membersPayload = [user.id, ...members];
+
     return this.groupRepository.create({
       data: {
         groupName,
@@ -42,7 +44,7 @@ export class CreateGroupHandler
         country: { connect: { id: lkCurrencyId } },
         members: {
           createMany: {
-            data: members.map((member) => ({
+            data: membersPayload.map((member) => ({
               memberId: member,
               status: GroupMemberStatus.ACTIVE,
             })),

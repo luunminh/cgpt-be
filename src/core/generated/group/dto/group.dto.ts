@@ -1,5 +1,5 @@
-import { GroupType } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
+import { GroupType } from '@prisma/client';
 
 export class GroupModel {
   @ApiProperty({
@@ -24,7 +24,7 @@ export class GroupModel {
   @ApiProperty({
     type: 'string',
   })
-  group_name: string;
+  groupName: string;
   @ApiProperty({
     type: 'string',
     nullable: true,
@@ -39,4 +39,8 @@ export class GroupModel {
     enum: GroupType,
   })
   groupType: GroupType;
+  @ApiProperty({
+    type: 'string',
+  })
+  slug: string;
 }

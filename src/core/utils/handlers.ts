@@ -1,12 +1,13 @@
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
+import { Prisma } from '@prisma/client';
 import { v4 as uuid_v4 } from 'uuid';
 
-// export const filterOperationByMode = (
-//   search?: string,
-//   mode: Prisma.QueryMode = Prisma.QueryMode.insensitive,
-// ): Prisma.StringFilter | undefined => {
-//   return search ? { contains: search, mode } : undefined;
-// };
+export const filterOperationByMode = (
+  search?: string,
+  mode: Prisma.QueryMode = Prisma.QueryMode.insensitive,
+): Prisma.StringFilter | undefined => {
+  return search ? { contains: search, mode } : undefined;
+};
 
 export const getRandomId = () => uuid_v4();
 
